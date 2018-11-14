@@ -13,5 +13,9 @@
 
     <artifactId>abtest-core</artifactId>
 
+    <dependencies>
+
+    </dependencies>
+
 
 </project>
