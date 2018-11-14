@@ -1,15 +1,18 @@
-package com.github.smartbooks.abtest.core;
+package com.github.smartbooks.abtest.core.algorithm;
 
+import com.github.smartbooks.abtest.core.ExperimentAlgorithm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * 默认分流算法
+ */
+public class DefaultHashAlgorithm extends ExperimentAlgorithm {
 
-public class MultiLayerExperiment {
-
-    private final static Logger logger = LogManager.getLogger(MultiLayerExperiment.class);
+    private static final Logger logger = LogManager.getLogger(DefaultHashAlgorithm.class);
 
     private static MessageDigest md5;
 
@@ -43,8 +46,8 @@ public class MultiLayerExperiment {
         return hash;
     }
 
-    public static long getBucketNum(long cookie, long bucketSize, String factor) {
-        long hashValue = splitBucket(md5, cookie, factor);
-        return hashValue % bucketSize;
+    @Override
+    public long allocation(long id, long bucketSize, String factor) {
+        return splitBucket(md5, id, factor) % bucketSize;
     }
 }
