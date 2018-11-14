@@ -12,7 +12,7 @@ public class Experimentlayer {
     private String summary = "";
     private Long bucketSize = 100L;
     private List<ExperimentBucket> experimentBucketList = new ArrayList<>();
-
+    
     public String getName() {
         return name;
     }

@@ -12,7 +12,7 @@ public class ExperimentBucket {
 
     private String name = "";
     private String summary = "";
-    private Set<Integer> bucketSet = new HashSet<>();
+    private Set<Long> bucketSet = new HashSet<>();
     private Map<String, String> paramMap = new HashMap<>();
     private Boolean one = false;
     private String url = "";
@@ -49,11 +49,11 @@ public class ExperimentBucket {
         this.summary = summary;
     }
 
-    public Set<Integer> getBucketSet() {
+    public Set<Long> getBucketSet() {
         return bucketSet;
     }
 
-    public void setBucketSet(Set<Integer> bucketSet) {
+    public void setBucketSet(Set<Long> bucketSet) {
         this.bucketSet = bucketSet;
     }
 

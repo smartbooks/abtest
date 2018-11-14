@@ -5,7 +5,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 实验流量观察着
@@ -54,9 +56,18 @@ public class ExperimentFlowObserver extends FlowObserver {
 
         try {
 
-            String url = msg.getReq().getParameter("url");
+            Map<String, String[]> map = msg.getReq().getParameterMap();
+            Set<String> keySet = map.keySet();
 
-            long id = Long.valueOf(msg.getReq().getParameter("id"));
+            String url = "";
+            if (keySet.contains("url")) {
+                url = map.get("url")[0];
+            }
+
+            long id = 0L;
+            if (keySet.contains("id")) {
+                id = Long.valueOf(map.get("id")[0]);
+            }
 
             return new Pair<>(url, id);
 

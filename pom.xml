@@ -11,6 +11,7 @@
 
     <modules>
         <module>abtest-core</module>
+        <module>abtest-server</module>
     </modules>
 
     <properties>

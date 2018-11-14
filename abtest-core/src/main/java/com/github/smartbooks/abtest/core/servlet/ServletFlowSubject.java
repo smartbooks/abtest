@@ -1,6 +1,6 @@
 package com.github.smartbooks.abtest.core.servlet;
 
-import com.github.smartbooks.abtest.core.ExperimentFlowObserver;
+import com.github.smartbooks.abtest.core.EchoExperimentFlowObserver;
 import com.github.smartbooks.abtest.core.FlowMessage;
 import com.github.smartbooks.abtest.core.FlowSubject;
 
@@ -14,7 +14,7 @@ public class ServletFlowSubject extends HttpServlet {
 
     @Override
     public void init() {
-        flowSubject.attach(new ExperimentFlowObserver());
+        flowSubject.attach(new EchoExperimentFlowObserver());
     }
 
     @Override
@@ -35,4 +35,5 @@ public class ServletFlowSubject extends HttpServlet {
     public void destroy() {
         flowSubject.detachAll();
     }
+
 }
