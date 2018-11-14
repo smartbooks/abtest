@@ -14,7 +14,7 @@ import java.util.Map;
  */
 public class ExperimentMatrix {
 
-    private static final Logger logger = LogManager.getLogger(ExperimentMatrix.class);
+    private final Logger logger = LogManager.getLogger(ExperimentMatrix.class);
 
     /**
      * 实验主题
@@ -75,6 +75,11 @@ public class ExperimentMatrix {
                                 resultMap.put(key, value);
                             }
 
+                            //只有1层,多用于灰度发布
+                            if (experimentBucket.getOne()) {
+                                resultMap.put("target", experimentBucket.getUrl());
+                            }
+
                         }
 
                     }
@@ -89,4 +94,20 @@ public class ExperimentMatrix {
         return resultMap;
     }
 
+    
+    public Map<String, ExperimentSubject> getExperimentSubjectMap() {
+        return experimentSubjectMap;
+    }
+
+    public void setExperimentSubjectMap(Map<String, ExperimentSubject> experimentSubjectMap) {
+        this.experimentSubjectMap = experimentSubjectMap;
+    }
+
+    public ExperimentAlgorithm getExperimentAlgorithm() {
+        return experimentAlgorithm;
+    }
+
+    public void setExperimentAlgorithm(ExperimentAlgorithm experimentAlgorithm) {
+        this.experimentAlgorithm = experimentAlgorithm;
+    }
 }
