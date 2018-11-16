@@ -1,5 +1,6 @@
 package com.github.smartbooks.abtest.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.smartbooks.abtest.core.actuator.EchoABTestServiceActuator;
 
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class ExperimentSubject {
     private String name = "";
     private String summary = "";
     private List<Experimentlayer> experimentlayerList = new ArrayList<>();
+
+    @JsonIgnore
     private ABTestServiceActuator abTestServiceActuator = new EchoABTestServiceActuator();
 
     public String getSource() {

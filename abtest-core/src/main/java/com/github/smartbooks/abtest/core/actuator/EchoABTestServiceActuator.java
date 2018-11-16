@@ -1,11 +1,13 @@
 package com.github.smartbooks.abtest.core.actuator;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.smartbooks.abtest.core.ABTestServiceActuator;
 import com.github.smartbooks.abtest.core.ExperimentSubject;
 import com.github.smartbooks.abtest.core.FlowMessage;
 import com.github.smartbooks.abtest.core.ResponseMessageWrap;
 import com.github.smartbooks.abtest.core.message.FailABTestServiceActuator;
 import com.github.smartbooks.abtest.core.message.OkResponseMessage;
+import com.github.smartbooks.abtest.core.utils.HttpUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,8 +25,24 @@ public class EchoABTestServiceActuator extends ABTestServiceActuator {
             //参数合并
             flowMessage.getReqMap().putAll(abTestParam);
 
-            //服务调用成功
-            ResponseMessageWrap.flush(new OkResponseMessage(flowMessage.getReqMap()), flowMessage.getResp());
+            ObjectMapper mapper = new ObjectMapper();
+
+            String url = flowMessage.getReqMap().getOrDefault("_target", "");
+
+            String postJson = mapper.writeValueAsString(abTestParam);
+
+            String jsonResult = HttpUtils.sendPost(url, postJson);
+
+            if (null != jsonResult && jsonResult.isEmpty() == false) {
+
+                //服务调用成功
+                ResponseMessageWrap.flush(new OkResponseMessage(mapper.readTree(jsonResult)), flowMessage.getResp());
+
+            } else {
+
+                //服务调用失败
+                throw new NullPointerException(String.format("url:%s post:%s result:%s", url, postJson, jsonResult));
+            }
 
         } catch (Exception e) {
             logger.error(e);

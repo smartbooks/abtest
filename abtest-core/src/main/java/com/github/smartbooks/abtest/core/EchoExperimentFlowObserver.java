@@ -37,6 +37,8 @@ public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
         }
 
         subject.getExperimentlayerList().add(layer);
+        subject.getExperimentlayerList().add(layer);
+        subject.getExperimentlayerList().add(layer);
 
         super.put(subject);
     }
