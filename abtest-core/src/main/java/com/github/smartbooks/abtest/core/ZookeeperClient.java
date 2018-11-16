@@ -13,6 +13,21 @@ import java.util.Map;
  * http://zookeeper.apache.org/doc/r3.4.5/javaExample.html
  * <p>
  * zookeeper-client
+ * <p>
+ * /bitmusic
+ *     /abtest
+ *         /cmd
+ *             com.gituhub.smartbooks.login
+ *                 d:{"source":"com.gituhub.smartbooks.login","target":"http://localhost:5000","name":"subject_login","summary":"","experimentlayerList":[{"name":"layer_ui","summary":"","bucketSize":5,"experimentBucketList":[{"name":"bucket_a","summary":"","bucketSet":[0,1,2],"paramMap":{"background":"red","skin":"blue"}},{"name":"bucket_b","summary":"","bucketSet":[3,4],"paramMap":{"background":"white","skin":"black","_target":"http://localhost:5000"}}]},{"name":"layer_ui","summary":"","bucketSize":5,"experimentBucketList":[{"name":"bucket_a","summary":"","bucketSet":[0,1,2],"paramMap":{"background":"red","skin":"blue"}},{"name":"bucket_b","summary":"","bucketSet":[3,4],"paramMap":{"background":"white","skin":"black","_target":"http://localhost:5000"}}]},{"name":"layer_ui","summary":"","bucketSize":5,"experimentBucketList":[{"name":"bucket_a","summary":"","bucketSet":[0,1,2],"paramMap":{"background":"red","skin":"blue"}},{"name":"bucket_b","summary":"","bucketSet":[3,4],"paramMap":{"background":"white","skin":"black","_target":"http://localhost:5000"}}]}]}
+ *             com.gituhub.smartbooks.logout
+ *         /live
+ *             id=100
+ *                 d:{"status":"active","url":"http://192.168.1.100:8080/ab/","weight":200}
+ *             id=101
+ *                 d:{"status":"dead","url":"http://192.168.1.101:8080/ab/","weight":500}
+ *         /master
+ *             d:id=100
+ *
  */
 public class ZookeeperClient {
 
