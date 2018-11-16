@@ -4,8 +4,6 @@ import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,12 +16,8 @@ public class ExperimentFlowObserver extends FlowObserver {
 
     private ExperimentMatrix experimentMatrix = new ExperimentMatrix();
 
-    private Map<String, ABTestService> abTestServiceMap = new HashMap<>();
-
-    public void put(ExperimentSubject experimentSubject, ABTestService abTestService) {
-        String url = abTestService.getUrl();
-        experimentMatrix.getExperimentSubjectMap().put(url, experimentSubject);
-        abTestServiceMap.put(url, abTestService);
+    public void put(ExperimentSubject subject) {
+        experimentMatrix.getExperimentSubjectMap().put(subject.getSource(), subject);
     }
 
     @Override
@@ -35,15 +29,8 @@ public class ExperimentFlowObserver extends FlowObserver {
 
             if (null != pm) {
 
-                Map<String, String> readyParamMap = experimentMatrix.exec(pm.getKey(), pm.getValue());
+                experimentMatrix.exec(pm.getKey(), pm.getValue(), message);
 
-                ABTestService abTestService = abTestServiceMap.getOrDefault(pm.getKey(), null);
-
-                if (null != abTestService) {
-
-                    abTestService.exec(readyParamMap, message);
-
-                }
             }
 
         } catch (Exception e) {

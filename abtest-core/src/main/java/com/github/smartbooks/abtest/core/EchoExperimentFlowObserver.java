@@ -1,15 +1,13 @@
 package com.github.smartbooks.abtest.core;
 
-import com.github.smartbooks.abtest.core.service.EchoABTestService;
-
 public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
 
     public EchoExperimentFlowObserver() {
 
-        ABTestService abTestService = new EchoABTestService();
-
         ExperimentSubject subject = new ExperimentSubject();
-        subject.setName("subject_echo");
+        subject.setName("subject_login");
+        subject.setSource("com.gituhub.smartbooks.login");
+        subject.setTarget("http://www.baidu.com");
 
         //layer
         Experimentlayer layer = new Experimentlayer();
@@ -18,8 +16,6 @@ public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
 
         {
             ExperimentBucket bucket = new ExperimentBucket();
-            bucket.setOne(true);
-            bucket.setUrl("http://www.baidu.com");
             bucket.setName("bucket_a");
             bucket.getBucketSet().add(0L);
             bucket.getBucketSet().add(1L);
@@ -31,21 +27,18 @@ public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
 
         {
             ExperimentBucket bucket = new ExperimentBucket();
-            bucket.setOne(true);
-            bucket.setUrl("http://www.google.com");
             bucket.setName("bucket_b");
             bucket.getBucketSet().add(3L);
             bucket.getBucketSet().add(4L);
             bucket.getParamMap().put("background", "white");
             bucket.getParamMap().put("skin", "black");
+            bucket.getParamMap().put("_target", "http://qq.com");
             layer.getExperimentBucketList().add(bucket);
         }
 
-
         subject.getExperimentlayerList().add(layer);
 
-
-        put(subject, abTestService);
+        super.put(subject);
     }
 
 }

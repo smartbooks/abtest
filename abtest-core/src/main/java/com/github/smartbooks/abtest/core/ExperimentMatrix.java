@@ -1,13 +1,11 @@
 package com.github.smartbooks.abtest.core;
 
 import com.github.smartbooks.abtest.core.algorithm.DefaultHashAlgorithm;
+import com.github.smartbooks.abtest.core.utils.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 实验矩阵
@@ -26,24 +24,18 @@ public class ExperimentMatrix {
      */
     private ExperimentAlgorithm experimentAlgorithm = new DefaultHashAlgorithm();
 
-    public static final String paramPrefix = "smartbooks.abtest";
 
-    /**
-     * 实验分配
-     *
-     * @param url 主题标识
-     * @param id  用户标识
-     * @return 实验参数
-     */
-    public Map<String, String> exec(String url, long id) {
+    public void exec(String source, long id, FlowMessage message) {
 
         Map<String, String> resultMap = new HashMap<>();
 
-        ExperimentSubject subject = experimentSubjectMap.getOrDefault(url, null);
+        ExperimentSubject subject = experimentSubjectMap.getOrDefault(source, null);
 
         if (null != subject && null != experimentAlgorithm) {
 
             try {
+
+                List<String> abTestPathList = new ArrayList<>();
 
                 List<Experimentlayer> experimenterList = subject.getExperimentlayerList();
 
@@ -60,24 +52,19 @@ public class ExperimentMatrix {
 
                         if (experimentBucket.getBucketSet().contains(bucket)) {
 
-                            String keyPrefix = String.format("%s.%s.%s.%s",
-                                    paramPrefix,
+                            String abTestPath = String.format("%s/%s/%s:%s",
                                     subject.getName(),
                                     experimentlayer.getName(),
-                                    experimentBucket.getName());
+                                    experimentBucket.getName(),
+                                    bucket);
+
+                            abTestPathList.add(abTestPath);
 
                             Iterator<Map.Entry<String, String>> it = experimentBucket.getParamMap().entrySet().iterator();
 
                             while (it.hasNext()) {
                                 Map.Entry<String, String> entry = it.next();
-                                String key = String.format("%s.%s", keyPrefix, entry.getKey());
-                                String value = entry.getValue();
-                                resultMap.put(key, value);
-                            }
-
-                            //只有1层,多用于灰度发布
-                            if (experimentBucket.getOne()) {
-                                resultMap.put("target", experimentBucket.getUrl());
+                                resultMap.put(entry.getKey(), entry.getValue());
                             }
 
                         }
@@ -86,15 +73,21 @@ public class ExperimentMatrix {
 
                 }
 
+                if (resultMap.containsKey("_target") == false) {
+                    resultMap.put("_target", subject.getTarget());
+                }
+
+                resultMap.put("_path", ListUtils.mkString(abTestPathList, ","));
+
+                subject.getAbTestServiceActuator().exec(resultMap, message, subject);
+
             } catch (Exception e) {
                 logger.error(e);
             }
         }
-
-        return resultMap;
     }
 
-    
+
     public Map<String, ExperimentSubject> getExperimentSubjectMap() {
         return experimentSubjectMap;
     }

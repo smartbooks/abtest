@@ -1,6 +1,7 @@
-package com.github.smartbooks.abtest.core.service;
+package com.github.smartbooks.abtest.core.actuator;
 
-import com.github.smartbooks.abtest.core.ABTestService;
+import com.github.smartbooks.abtest.core.ABTestServiceActuator;
+import com.github.smartbooks.abtest.core.ExperimentSubject;
 import com.github.smartbooks.abtest.core.FlowMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,12 +11,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-public class EchoABTestService extends ABTestService {
+public class EchoABTestServiceActuator extends ABTestServiceActuator {
 
-    private final Logger logger = LogManager.getLogger(EchoABTestService.class);
+    private final Logger logger = LogManager.getLogger(EchoABTestServiceActuator.class);
 
     @Override
-    public void exec(Map<String, String> abTestParam, FlowMessage flowMessage) {
+    public void exec(Map<String, String> abTestParam, FlowMessage flowMessage, ExperimentSubject subject) {
 
         StringBuilder repContent = new StringBuilder();
 

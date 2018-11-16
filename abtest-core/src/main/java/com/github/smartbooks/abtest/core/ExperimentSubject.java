@@ -1,5 +1,7 @@
 package com.github.smartbooks.abtest.core;
 
+import com.github.smartbooks.abtest.core.actuator.EchoABTestServiceActuator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,17 +10,27 @@ import java.util.List;
  */
 public class ExperimentSubject {
 
-    private String url = "";
+    private String source = "";
+    private String target = "";
     private String name = "";
     private String summary = "";
     private List<Experimentlayer> experimentlayerList = new ArrayList<>();
-    
-    public String getUrl() {
-        return url;
+    private ABTestServiceActuator abTestServiceActuator = new EchoABTestServiceActuator();
+
+    public String getSource() {
+        return source;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 
     public String getName() {
@@ -43,5 +55,13 @@ public class ExperimentSubject {
 
     public void setExperimentlayerList(List<Experimentlayer> experimentlayerList) {
         this.experimentlayerList = experimentlayerList;
+    }
+
+    public ABTestServiceActuator getAbTestServiceActuator() {
+        return abTestServiceActuator;
+    }
+
+    public void setAbTestServiceActuator(ABTestServiceActuator abTestServiceActuator) {
+        this.abTestServiceActuator = abTestServiceActuator;
     }
 }

@@ -14,24 +14,6 @@ public class ExperimentBucket {
     private String summary = "";
     private Set<Long> bucketSet = new HashSet<>();
     private Map<String, String> paramMap = new HashMap<>();
-    private Boolean one = false;
-    private String url = "";
-
-    public Boolean getOne() {
-        return one;
-    }
-
-    public void setOne(Boolean one) {
-        this.one = one;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public String getName() {
         return name;

@@ -16,7 +16,7 @@
 
     <servlet-mapping>
         <servlet-name>abtest</servlet-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/ab/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
