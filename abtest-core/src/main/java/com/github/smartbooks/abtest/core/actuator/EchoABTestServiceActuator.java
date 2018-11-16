@@ -29,7 +29,7 @@ public class EchoABTestServiceActuator extends ABTestServiceActuator {
 
             String url = flowMessage.getReqMap().getOrDefault("_target", "");
 
-            String postJson = mapper.writeValueAsString(abTestParam);
+            String postJson = mapper.writeValueAsString(flowMessage.getReqMap());
 
             String jsonResult = HttpUtils.sendPost(url, postJson);
 

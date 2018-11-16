@@ -7,7 +7,7 @@ public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
         ExperimentSubject subject = new ExperimentSubject();
         subject.setName("subject_login");
         subject.setSource("com.gituhub.smartbooks.login");
-        subject.setTarget("http://www.baidu.com");
+        subject.setTarget("http://localhost:5000");
 
         //layer
         Experimentlayer layer = new Experimentlayer();
@@ -32,7 +32,7 @@ public class EchoExperimentFlowObserver extends ExperimentFlowObserver {
             bucket.getBucketSet().add(4L);
             bucket.getParamMap().put("background", "white");
             bucket.getParamMap().put("skin", "black");
-            bucket.getParamMap().put("_target", "http://qq.com");
+            bucket.getParamMap().put("_target", "http://localhost:5000");
             layer.getExperimentBucketList().add(bucket);
         }
 
