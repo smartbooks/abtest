@@ -15,6 +15,14 @@ public class ExperimentFlowObserver extends FlowObserver {
 
     private ExperimentMatrix experimentMatrix = new ExperimentMatrix();
 
+    public ExperimentMatrix getExperimentMatrix() {
+        return experimentMatrix;
+    }
+
+    public void setExperimentMatrix(ExperimentMatrix experimentMatrix) {
+        this.experimentMatrix = experimentMatrix;
+    }
+
     public void put(ExperimentSubject subject) {
         experimentMatrix.getExperimentSubjectMap().put(subject.getSource(), subject);
     }
