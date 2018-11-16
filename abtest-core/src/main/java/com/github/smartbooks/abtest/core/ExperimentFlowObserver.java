@@ -1,11 +1,10 @@
 package com.github.smartbooks.abtest.core;
 
+import com.github.smartbooks.abtest.core.message.ErrorResponseMessage;
+import com.github.smartbooks.abtest.core.message.ParamVerifyFailResponseMessage;
 import javafx.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * 实验流量观察着
@@ -22,47 +21,46 @@ public class ExperimentFlowObserver extends FlowObserver {
 
     @Override
     public void update(FlowMessage message) {
-
         try {
 
-            Pair<String, Long> pm = resolveExperimentParam(message);
+            message.resolveParam();
 
-            if (null != pm) {
+            Pair<String, Long> pm = message.getCommand();
+
+            if (validateExperimentParam(pm)) {
 
                 experimentMatrix.exec(pm.getKey(), pm.getValue(), message);
 
+            } else {
+
+                ResponseMessageWrap.flush(new ParamVerifyFailResponseMessage(
+                        new Pair<>("_cmd", "Require StringType"),
+                        new Pair<>("_uid", "Require LoneType")
+                ), message.getResp());
+
             }
 
         } catch (Exception e) {
             logger.error(e);
-        }
 
+            //未知的错误
+            ResponseMessageWrap.flush(new ErrorResponseMessage(e), message.getResp());
+        }
     }
 
-    private Pair<String, Long> resolveExperimentParam(FlowMessage msg) {
+    private boolean validateExperimentParam(Pair<String, Long> cmd) {
 
-        try {
-
-            Map<String, String[]> map = msg.getReq().getParameterMap();
-            Set<String> keySet = map.keySet();
-
-            String url = "";
-            if (keySet.contains("url")) {
-                url = map.get("url")[0];
-            }
-
-            long id = 0L;
-            if (keySet.contains("id")) {
-                id = Long.valueOf(map.get("id")[0]);
-            }
-
-            return new Pair<>(url, id);
-
-        } catch (Exception e) {
-            logger.error(e);
+        String key = cmd.getKey();
+        if (null == key || key.isEmpty()) {
+            return false;
         }
 
-        return null;
+        Long uid = cmd.getValue();
+        if (uid == 0) {
+            return false;
+        }
+
+        return true;
     }
 
 }

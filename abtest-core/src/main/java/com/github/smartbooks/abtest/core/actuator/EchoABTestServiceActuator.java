@@ -3,12 +3,12 @@ package com.github.smartbooks.abtest.core.actuator;
 import com.github.smartbooks.abtest.core.ABTestServiceActuator;
 import com.github.smartbooks.abtest.core.ExperimentSubject;
 import com.github.smartbooks.abtest.core.FlowMessage;
+import com.github.smartbooks.abtest.core.ResponseMessageWrap;
+import com.github.smartbooks.abtest.core.message.FailABTestServiceActuator;
+import com.github.smartbooks.abtest.core.message.OkResponseMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletOutputStream;
-import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 
 public class EchoABTestServiceActuator extends ABTestServiceActuator {
@@ -18,27 +18,19 @@ public class EchoABTestServiceActuator extends ABTestServiceActuator {
     @Override
     public void exec(Map<String, String> abTestParam, FlowMessage flowMessage, ExperimentSubject subject) {
 
-        StringBuilder repContent = new StringBuilder();
-
-        Iterator<Map.Entry<String, String>> it = abTestParam.entrySet().iterator();
-
-        while (it.hasNext()) {
-
-            Map.Entry<String, String> entry = it.next();
-
-            repContent.append(String.format("%s:%s\n", entry.getKey(), entry.getValue()));
-
-        }
-
         try {
 
-            ServletOutputStream out = flowMessage.getResp().getOutputStream();
-            out.write(repContent.toString().getBytes("utf-8"));
-            out.flush();
-            out.close();
+            //参数合并
+            flowMessage.getReqMap().putAll(abTestParam);
 
-        } catch (IOException e) {
+            //服务调用成功
+            ResponseMessageWrap.flush(new OkResponseMessage(flowMessage.getReqMap()), flowMessage.getResp());
+
+        } catch (Exception e) {
             logger.error(e);
+
+            //服务调用失败
+            ResponseMessageWrap.flush(new FailABTestServiceActuator(abTestParam, subject, e), flowMessage.getResp());
         }
 
     }

@@ -1,6 +1,8 @@
 package com.github.smartbooks.abtest.core;
 
 import com.github.smartbooks.abtest.core.algorithm.DefaultHashAlgorithm;
+import com.github.smartbooks.abtest.core.message.FailExperimentSubjectResponseMessage;
+import com.github.smartbooks.abtest.core.message.NoFoundExperimentSubjectResponseMessage;
 import com.github.smartbooks.abtest.core.utils.ListUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,12 +81,23 @@ public class ExperimentMatrix {
 
                 resultMap.put("_path", ListUtils.mkString(abTestPathList, ","));
 
+                //服务执行器调用接口
                 subject.getAbTestServiceActuator().exec(resultMap, message, subject);
 
             } catch (Exception e) {
                 logger.error(e);
+
+                //实验发生未知错误
+                ResponseMessageWrap.flush(new FailExperimentSubjectResponseMessage(subject, e), message.getResp());
             }
+
+        } else {
+
+            //未找到实验主题
+            ResponseMessageWrap.flush(new NoFoundExperimentSubjectResponseMessage(source), message.getResp());
+
         }
+
     }
 
 
