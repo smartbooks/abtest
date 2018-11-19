@@ -15,6 +15,13 @@ public class ExperimentFlowObserver extends FlowObserver {
 
     private ExperimentMatrix experimentMatrix = new ExperimentMatrix();
 
+    private ZookeeperClientWatcher zookeeperClientWatcher = new ZookeeperClientWatcher();
+
+    public ExperimentFlowObserver() {
+        zookeeperClientWatcher.setExperimentMatrix(experimentMatrix);
+        zookeeperClientWatcher.start();
+    }
+
     public ExperimentMatrix getExperimentMatrix() {
         return experimentMatrix;
     }
@@ -71,4 +78,9 @@ public class ExperimentFlowObserver extends FlowObserver {
         return true;
     }
 
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        zookeeperClientWatcher.stop();
+    }
 }
